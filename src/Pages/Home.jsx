@@ -6,10 +6,10 @@ import { Link } from 'react-router-dom'
 function Home() {
   return (
     <>
-  <div className="container-fluid rounded" style={{backgroundColor:"blue"}}>
+  <div className="container-fluid rounded" style={{backgroundColor:""}}>
   <Row className='align-items-center p-5'>
                     <Col sm={12} md={6}>
-                        <h1 className='fw-bolder text-light'><i class="fa-solid fa-list-check"></i>Project-Fair</h1>
+                        <h1 className='fw-bolder text-dark'><i class="fa-solid fa-list-check"></i>Project-Fair</h1>
                         <p className='align-items-justify text-black'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eligendi error asperiores, sunt fugiat consectetur totam voluptas tempore exercitationem! Recusandae qui neque, incidunt quod molestiae amet fugit molestias nihil eligendi temporibus.</p>
                          <Link to={'/login'} className='btn btn-warning border border-rounded'>Start to Explore <i class="fa-solid fa-arrow-right"></i></Link>
                     </Col>

@@ -30,13 +30,16 @@ function Footer() {
                 </a>
               </p>
               <p>
-              <a href='/Home' className='text-white' style={{textDecoration:'none'}}>
-                  Home page
+              <a href='/login' className='text-white' style={{textDecoration:'none'}}>
+                  login page
                 </a>
               </p>
               <p>
-              <a href='/Watchhistory' className='text-white' style={{textDecoration:'none'}}>
-                  Watch History
+              <a href='/register' className='text-white' style={{textDecoration:'none'}}>
+                  register page 
+                </a> <br /> <br />
+                <a href='/dashboard' className='text-white' style={{textDecoration:'none'}}>
+                  dashboard page
                 </a>
               </p>
               
