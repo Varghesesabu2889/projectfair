@@ -1,10 +1,76 @@
-import React from 'react'
+import React ,{ useState } from 'react'
+import { useNavigate } from "react-router-dom";
 import {  Link } from 'react-router-dom'
 import { Form } from "react-bootstrap";
+import { loginAPI, registerAPI } from './services/allAPI';
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 function Auth({register}) {
 
+  
+  const [userData,setUserData] =useState({
+    username:"",email:"",password:""
+  })
+
   const isRegisterForm=register?true:false
+  const navigate = useNavigate()
+//register
+const handleRegister = async (e)=>{
+  e.preventDefault();
+  const {username, email, password} = userData;
+ // if( !username==="" || !email===""|| !password===""){
+    if(!username || !email || !password){
+
+    toast.warning("All fields are required"); 
+  }else{
+    const result = await registerAPI (userData)
+    console.log(result);
+    if(result.status===200){
+      console.log(result);
+    toast.success(`${result.data.username} has registered successfully`);
+    setUserData({
+      username:"",email:"",password:""
+  })
+  navigate('/login')
+  }else{
+    toast.error(result.response.data)
+    console.log(result);
+  }
+}
+}
+
+const handleLogin = async (e)=>{
+  e.preventDefault()
+  const { email, password} = userData;
+     if( !email || !password){
+ 
+     toast.warning("All fields are required"); 
+   }else{
+     const result = await loginAPI (userData)
+     console.log(result);
+     if(result.status===200){
+       console.log(result);
+// Session storage for existing user & token
+sessionStorage.setItem('existingUser',JSON.stringify(result.data.existingUser))
+sessionStorage.setItem('token',JSON.token)
+
+    //  toast.success(`${result.data.username} has registered successfully`);
+     setUserData({
+      email:"",password:""
+   })
+   navigate('/home')
+   }else{
+     toast.error(result.response.data)
+     console.log(result);
+   }
+ } 
+}
+
+
+
+
   return (
+    <>
     <div style={{width:"100",height:"100vh",marginTop:"100px"}} className='d-flex justify-content-center'>
 <div className="container w-75">
 <Link to={"/"} style={{textDecoration:"none",color:"blue"}}><i class="fa-solid fa-left-long"></i>Back To Home</Link>
@@ -27,30 +93,33 @@ isRegisterForm?"Sign Up to Your Account":"Sign In to Your Account"
 {
   isRegisterForm && 
   <Form.Group className="mb-3" controlId="formBasicEmail">
-  <Form.Control type="email" placeholder="Enter Username" />
+  <Form.Control type="text" placeholder="Enter Username"  value={userData.username} 
+  onChange={e=>setUserData({...userData,username:e.target.value})}/>
 </Form.Group>
 
 }
 
 
 <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Control type="email" placeholder="Enter email" />
+        <Form.Control type="email" placeholder="Enter email" value={userData.email} 
+  onChange={e=>setUserData({...userData,email:e.target.value})} />
     
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Control type="password" placeholder="Enter password" />
+        <Form.Control type="password" placeholder="Enter password" value={userData.password} 
+  onChange={e=>setUserData({...userData,password:e.target.value})} />
     
       </Form.Group>
 {
   isRegisterForm?
   <div>
-    <button className='btn btn-light mb-2'>
+    <button className='btn btn-light mb-2' onClick={handleRegister}>
       Register
     </button>
     <p>Already an account ?  Click Here to <Link to={'/login'} style={{textDecoration:"none", color:"blue"}}>Login</Link></p>
   </div>:
     <div>
-    <button className='btn btn-light mb-2'>
+    <button className='btn btn-light mb-2'  onClick={handleLogin}>
       Login
     </button>
     <p>Doesn't have any Account? Click Here to <Link to={'/register'} style={{textDecoration:"none", color:"red"}}>Register</Link></p>
@@ -76,7 +145,11 @@ isRegisterForm?"Sign Up to Your Account":"Sign In to Your Account"
   </div>
 </div>
 </div>
-    </div>
+</div>
+<ToastContainer  position="top-center" 
+theme='colored'
+autoClose={2000} />
+    </>
   )
 }
 
