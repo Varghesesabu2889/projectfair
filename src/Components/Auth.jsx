@@ -5,6 +5,7 @@ import { Form } from "react-bootstrap";
 import { loginAPI, registerAPI } from './services/allAPI';
 import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
+  
 function Auth({register}) {
 
   
@@ -52,13 +53,13 @@ const handleLogin = async (e)=>{
        console.log(result);
 // Session storage for existing user & token
 sessionStorage.setItem('existingUser',JSON.stringify(result.data.existingUser))
-sessionStorage.setItem('token',JSON.token)
+sessionStorage.setItem('token',result.data.token)
 
-    //  toast.success(`${result.data.username} has registered successfully`);
+    //  toast.success(`${result.data.username} has login successfully`);
      setUserData({
       email:"",password:""
    })
-   navigate('/home')
+   navigate('/')
    }else{
      toast.error(result.response.data)
      console.log(result);
