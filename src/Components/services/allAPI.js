@@ -22,6 +22,6 @@ export const registerAPI = async(user)=>{
  //addProject
 
  export const addProjectAPI = async (reqBody,reqHeader)=>{
-    return  await commonAPI("POST" , `${BASE_URL}/project/add`,reqBody,reqHeader)
+    return  await commonAPI("POST" , `${BASE_URL}/projects/add`,reqBody,reqHeader)
 
  }

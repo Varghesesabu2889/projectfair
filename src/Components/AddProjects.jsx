@@ -1,7 +1,19 @@
 import { Button, Modal } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react'
+import { addProjectAPI } from './services/allAPI';
+import { ToastContainer, toast } from 'react-toastify';
 
 function AddProjects() {
+
+  const[token, setToken] = useState("")
+ 
+  useEffect(()=>{
+    if(sessionStorage.getItem("token")){
+      setToken(sessionStorage.getItem("token"))
+    }else{
+      setToken("")
+    }
+  })
 
   const [projectDetails,setProjectDetails] = useState({
     title:"",languages:"",github:"",website:"",overview:"",projectimage:""
@@ -25,6 +37,50 @@ function AddProjects() {
         setPreview(URL.createObjectURL(projectDetails.projectimage))
       }
     },[projectDetails.projectimage])
+
+const handleAdd = async (e)=>{
+    e.preventDefault()
+    const {title,languages,github,website,overview,projectimage} = projectDetails
+    if(!title|| !languages|| !github|| !website|| !overview|| !projectimage){
+      toast.error("please fill the missing fields")
+    }else{
+      const reqBody = new FormData()
+      reqBody.append('title',title)
+      reqBody.append('languages', languages)
+      reqBody.append('github', github)  
+      reqBody.append('website', website)
+      reqBody.append('overview', overview)  
+      reqBody.append('projectImage', projectimage)
+
+      if(token){
+       const  reqHeader ={
+          "Content-Type": "multipart/form-data",
+          "Authorization":`Bearer ${token}` 
+        }
+        const result = await addProjectAPI(reqBody,reqHeader)
+      if(result.status===200){
+        console.log(result.data);
+        handleClose()
+        toast.success("Projects added");
+    }else{
+      console.log(result);
+      console.log(result.response.data);
+    }
+      
+
+}
+    }
+  }
+
+
+
+
+
+
+
+
+
+
   return (
     <>
  <Button variant="info" onClick={handleShow}>
@@ -92,9 +148,13 @@ function AddProjects() {
           <Button variant="success" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="success">Add</Button>
+          <Button variant="success" onClick={handleAdd}>Add</Button>
         </Modal.Footer>
       </Modal>
+      <ToastContainer 
+      position="top-center" 
+      theme='colored'
+      autoClose={2000}/>
     </>
   )
 }
