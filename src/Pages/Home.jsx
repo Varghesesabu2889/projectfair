@@ -3,14 +3,29 @@ import{Row,Col} from 'react-bootstrap'
 import titleimage from '../assets/mernproject.gif'
 import ProjectCard from '../Components/ProjectCard'
 import { Link } from 'react-router-dom'
+import { homeProjectAPI } from '../Components/services/allAPI'
 function Home() {
   const  [loggedin,setLoggedin]=useState(false)
+const [homeProjects,setHomeProjects]=useState([])
+
+const getHomeProjects = async ()=>{
+  const result = await homeProjectAPI()
+  if(result.status===200){
+    setHomeProjects(result.data)
+  }else{
+    console.log(result);
+    console.log(result.response);
+  }
+}
+// console.log(homeProjects);
   useEffect(()=>{
     if(sessionStorage.getItem("token")){
       setLoggedin(true);
     }else{
       setLoggedin(false)
     }
+    //apicall
+    getHomeProjects();
     },[])
   return (
     <>
@@ -39,9 +54,13 @@ function Home() {
     <h1 className='fw-bolder text-center'>Explore Your Projects</h1>
 <marquee scrollAmount={25}>
     <Row>
-      <Col sm={12} md={6} lg={3} >
+      {
+        homeProjects?.length>0?homeProjects.map(projects=>(
+          <Col sm={12} md={6} lg={3} >
         <ProjectCard/>
       </Col>
+        )):null
+         }
     </Row>
     </marquee>
     <div className="text-center"><Link to={"./projects"}>View More Projects</Link></div>
