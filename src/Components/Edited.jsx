@@ -7,7 +7,8 @@ import { editProjectAPI } from './services/allAPI';
 function Edited({project}) {
 
   const [projectDetails,setProjectDetails] = useState({
-    title:project.title,languages:project.languages,github:project.github,website:project.website,overview:project.overview,projectImage:""
+    id:project._id,title:project.title,languages:project.languages,github:project.github,website:project.website,overview:project.overview
+    ,projectImage:""
   })
     const [show, setShow] = useState(false);
 
@@ -16,7 +17,7 @@ function Edited({project}) {
     const handleClose = () => {
       setShow(false)
     setProjectDetails({
-      title:project.title,languages:project.languages,github:project.github,website:project.website,overview:project.overview,projectImage:""
+      id:project._id,title:project.title,languages:project.languages,github:project.github,website:project.website,overview:project.overview,projectImage:""
  
     })
    setPreview("")
@@ -29,7 +30,7 @@ function Edited({project}) {
       }
     },[projectDetails.projectImage])
 
-const  handleupdate = async ()=>{
+const  handleUpdate = async ()=>{
   const {title,languages,github,website,overview,projectImage} = projectDetails
   if(!title|| !languages|| !github|| !website|| !overview|| !projectImage){
     alert("please fill the missing fields")
@@ -50,10 +51,10 @@ const reqHeader ={
 
 }
 //api call
-const result = await editProjectAPI(reqBody,reqHeader)
+const result = await editProjectAPI(id,reqBody,reqHeader)
 if(result.status === 200){
   handleClose()
-  //pass the responce to the projects
+  //pass the response to the projects
 }else{
   console.log(result);
   alert(result.response.data)
@@ -64,7 +65,7 @@ if(result.status === 200){
   "Authorization":`Bearer ${token}`
 }
 //api cal
-const result = await editProjectAPI(reqBody,reqHeader)
+const result = await editProjectAPI(id,reqBody,reqHeader)
 if(result.status === 200){
   handleClose()
   //pass the responce to the projects
@@ -107,31 +108,31 @@ projectImage:e.target.files[0]})}/>
             <div className="col-lg-6">
                 <div className="mb-3">
                     <input type="text" className="form-control" placeholder='Project Title'  
-                    value={project?.title}
+                    value={projectDetails?.title}
                     onChange={e=>setProjectDetails({...projectDetails,title:e.target.value})}
                     />
                     </div>
                     <div className="mb-3">
                     <input type="text" className="form-control"  placeholder='Language Used ' 
-                     value={project?.languages}
+                     value={projectDetails?.languages}
                      onChange={e=>setProjectDetails({...projectDetails,languages:e.target.value})}
                       />
                     </div>
                     <div className="mb-3">
                     <input type="text" className="form-control" placeholder=' Github'
-                      value={project?.github}
+                      value={projectDetails?.github}
                       onChange={e=>setProjectDetails({...projectDetails,github:e.target.value})}
                       />
                     </div>
                     <div className="mb-3">
                     <input type="text" className="form-control"   placeholder='Website Link' 
-                     value={project?.website}
+                     value={projectDetails?.website}
                      onChange={e=>setProjectDetails({...projectDetails,website:e.target.value})}
                        />
                     </div>
                     <div className="mb-3">
                     <input type="text" className="form-control"   placeholder='Project Overview'
-                    value={project?.overview}
+                    value={projectDetails?.overview}
                     onChange={e=>setProjectDetails({...projectDetails,overview:e.target.value})}
                     />
                     
@@ -143,7 +144,7 @@ projectImage:e.target.files[0]})}/>
           <Button variant="success" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary">Update</Button>
+          <Button variant="primary" onClick={handleUpdate}>Update</Button>
         </Modal.Footer>
       </Modal>
 
