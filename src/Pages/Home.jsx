@@ -55,9 +55,9 @@ const getHomeProjects = async ()=>{
 <marquee scrollAmount={25}>
     <Row>
       {
-        homeProjects?.length>0?homeProjects.map(projects=>(
+        homeProjects?.length>0?homeProjects.map(project=>(
           <Col sm={12} md={6} lg={3} >
-        <ProjectCard/>
+        <ProjectCard project={project}/>
       </Col>
         )):null
          }

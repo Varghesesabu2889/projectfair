@@ -31,3 +31,21 @@ export const registerAPI = async(user)=>{
  export const homeProjectAPI = async ()=>{
     return await commonAPI("GET",`${BASE_URL}/projects/homeProjects`,"","")
  }
+
+ //getAllProjects
+
+ export const allProjectAPI = async (searchKey,reqHeader)=>{
+    return await commonAPI("GET",`${BASE_URL}/projects/all?search=${searchKey}`,"",reqHeader)
+ }
+
+ //userProject
+
+ export  const userProjectAPI = async (reqHeader)=> {
+   return await commonAPI("GET",`${BASE_URL}/user/allProjects`,"",reqHeader)
+ }
+
+ //edit project
+
+ export const editProjectAPI = async (projectId,reqBody,reqHeader)=>{
+   return await commonAPI("PUT",`${BASE_URL}/projects/edit/${projectId}`,reqBody,reqHeader);
+ }

@@ -1,9 +1,11 @@
 import { Button, Modal } from 'react-bootstrap';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { addProjectAPI } from './services/allAPI';
 import { ToastContainer, toast } from 'react-toastify';
+import { addProjectResponseContext } from '../context/ContextShare';
 
 function AddProjects() {
+  const {addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseContext)
 
   const[token, setToken] = useState("")
  
@@ -16,14 +18,14 @@ function AddProjects() {
   })
 
   const [projectDetails,setProjectDetails] = useState({
-    title:"",languages:"",github:"",website:"",overview:"",projectimage:""
+    title:"",languages:"",github:"",website:"",overview:"",projectImage:""
   })
   console.log(projectDetails);
     const [show, setShow] = useState(false);
 
     const handleClose = () =>{ setShow(false)
     setProjectDetails({
-      title:"",languages:"",github:"",website:"",overview:"",projectimage:""
+      title:"",languages:"",github:"",website:"",overview:"",projectImage:""
 
     })
     setPreview("")
@@ -33,15 +35,15 @@ function AddProjects() {
     const [preview,setPreview] =useState("")
 
     useEffect(()=>{
-      if(projectDetails.projectimage){
-        setPreview(URL.createObjectURL(projectDetails.projectimage))
+      if(projectDetails.projectImage){
+        setPreview(URL.createObjectURL(projectDetails.projectImage))
       }
-    },[projectDetails.projectimage])
+    },[projectDetails.projectImage])
 
 const handleAdd = async (e)=>{
     e.preventDefault()
-    const {title,languages,github,website,overview,projectimage} = projectDetails
-    if(!title|| !languages|| !github|| !website|| !overview|| !projectimage){
+    const {title,languages,github,website,overview,projectImage} = projectDetails
+    if(!title|| !languages|| !github|| !website|| !overview|| !projectImage){
       toast.error("please fill the missing fields")
     }else{
       const reqBody = new FormData()
@@ -50,7 +52,7 @@ const handleAdd = async (e)=>{
       reqBody.append('github', github)  
       reqBody.append('website', website)
       reqBody.append('overview', overview)  
-      reqBody.append('projectImage', projectimage)
+      reqBody.append('projectImage', projectImage)
 
       if(token){
        const  reqHeader ={
@@ -61,7 +63,7 @@ const handleAdd = async (e)=>{
       if(result.status===200){
         console.log(result.data);
         handleClose()
-        toast.success("Projects added");
+setAddProjectResponse(result.data)
     }else{
       console.log(result);
       console.log(result.response.data);
@@ -102,7 +104,7 @@ const handleAdd = async (e)=>{
             <div className="col-lg-6">
             <label>
 
-<input type="file" style={{display:"none"}} onChange={e=>setProjectDetails({...projectDetails,projectimage:e.target.files[0]})}/>
+<input type="file" style={{display:"none"}} onChange={e=>setProjectDetails({...projectDetails,projectImage:e.target.files[0]})}/>
 <img src={preview?preview:"https://cdn.pixabay.com/photo/2016/01/03/00/43/upload-1118929_1280.png"} alt="" width={"200px"}  className='rounded circle' 
 />
 </label>  
